@@ -1,3 +1,8 @@
+![License](https://img.shields.io/badge/license-MIT-green)
+![Compiler](https://img.shields.io/badge/GCC-16.1+-blue)
+![C++](https://img.shields.io/badge/C%2B%2B-20-blue)
+![Platform](https://img.shields.io/badge/platform-freestanding-orange)
+
 # osdev-libcppabi
 
 `osdev-libcppabi` is a lightweight freestanding implementation of the low-level C++ ABI runtime required by modern C++ compilers. It is designed for operating systems, kernels, bootloaders, and other freestanding environments.
@@ -78,8 +83,6 @@ cmake -DARCH=x86 -DCMAKE_CXX_COMPILER=/mnt/d/osdev/i686-elf/bin/i686-elf-g++ -DC
 
 make -j $(nproc)
 ```
-
-## Running Tests
 
 ## Status
 
