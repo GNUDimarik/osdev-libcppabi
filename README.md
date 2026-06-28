@@ -86,4 +86,4 @@ make -j $(nproc)
 
 ## Status
 
-The project currently provides the minimal runtime required for freestanding C++ development and is intended to grow together with the DUX operating system.
+The project currently provides the minimal runtime required for freestanding C++ development and is intended for osdev
