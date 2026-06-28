@@ -19,7 +19,7 @@ The library is intended to work together with **osdev-libstdc** and provides the
 
 ## Project Structure
 
-### Imported from libcxxrt
+### Imported from [libcxxrt](https://github.com/libcxxrt/libcxxrt)
 
 The following files are adapted from the **libcxxrt** project:
 
@@ -31,7 +31,7 @@ Repository:
 
 https://github.com/libcxxrt/libcxxrt
 
-The original project provides a BSD-licensed implementation of the Itanium C++ ABI runtime. :contentReference[oaicite:0]{index=0}
+The original project provides a BSD-licensed implementation of the [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html) runtime.
 
 ## Custom Implementation
 
