@@ -1,0 +1,3 @@
+[submodule "libstdc"]
+	path = libstdc
+	url = git@github.com:GNUDimarik/osdev-libstdc
