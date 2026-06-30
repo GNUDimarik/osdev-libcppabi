@@ -35,13 +35,6 @@ enum class align_val_t: size_t
 {
 };
 
-struct nothrow_t
-{
-    explicit nothrow_t() = default;
-};
-
-extern const __STD_NAMESPACE::nothrow_t nothrow;
-
 __END_STD_NAMESPACE
 
 void *operator new(size_t size);

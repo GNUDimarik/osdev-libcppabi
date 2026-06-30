@@ -300,6 +300,9 @@ using Guard = DoubleWordGuard<0, 24>;
 
 } // namespace
 
+namespace __cxxabiv1
+{
+
 /**
  * Acquires a lock on a guard, returning 0 if the object has already been
  * initialised, and 1 if it has not.  If the object is already constructed then
@@ -353,3 +356,4 @@ extern "C" void __cxa_guard_release(Guard *guard_object)
 {
     guard_object->unlock(true);
 }
+} // __cxxabiv1

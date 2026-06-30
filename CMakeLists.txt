@@ -7,7 +7,9 @@ add_library(${PROJECT_NAME} STATIC
         auxhelper.cc
         guard.cc
         new.h
-        new.cpp)
+        new.cpp
+        vector.cpp
+        cxxabi.h)
 
 target_compile_options(${PROJECT_NAME}
         PRIVATE
