@@ -1,9 +1,9 @@
+# osdev-libcppabi
+
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Compiler](https://img.shields.io/badge/GCC-16.1+-blue)
 ![C++](https://img.shields.io/badge/C%2B%2B-20-blue)
 ![Platform](https://img.shields.io/badge/platform-freestanding-orange)
-
-# osdev-libcppabi
 
 ![abi](https://raw.githubusercontent.com/GNUDimarik/osdev-libcppabi/main/docs/images/abi.png)
 
