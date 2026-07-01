@@ -133,9 +133,6 @@ public:
     void unlock(bool isInitialised)
     {
         val.store(isInitialised ? initialised : 0, memory_order::release);
-#ifndef NDEBUG
-        GuardWord init_state = initialised;
-#endif
     }
 
     /**
