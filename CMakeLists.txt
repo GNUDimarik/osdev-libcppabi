@@ -9,8 +9,7 @@ add_library(${PROJECT_NAME} STATIC
         new.h
         new.cpp
         vector.cpp
-        cxxabi.h
-        tests/testing.h)
+        cxxabi.h)
 
 target_compile_options(${PROJECT_NAME}
         PRIVATE
@@ -44,8 +43,7 @@ endif ()
 
 if(DEFINED ENABLE_TEST)
     add_executable(test_vector1.pass
-            tests/test_vector1.pass.cpp
-            tests/testing.h)
+            tests/test_vector1.pass.cpp)
 
     target_link_libraries(test_vector1.pass PRIVATE
             osdev-libcppabi
