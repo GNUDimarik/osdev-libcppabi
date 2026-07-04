@@ -195,12 +195,7 @@ __cxa_vec_delete3(
             __cxa_vec_dtor(__array_address, __element_count, __element_size, __destructor);
         }
 
-        size_t __sz = 0;
-
-        if (__padding_size > 0) {
-            __sz = __element_count * __element_size + __padding_size;
-        }
-
+        size_t __sz = __element_count * __element_size + __padding_size;
         __dealloc(__base, __sz);
     }
 }
