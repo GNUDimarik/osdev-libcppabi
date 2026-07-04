@@ -9,7 +9,8 @@ add_library(${PROJECT_NAME} STATIC
         new.h
         new.cpp
         vector.cpp
-        cxxabi.h)
+        cxxabi.h
+        tests/test.cc)
 
 target_compile_options(${PROJECT_NAME}
         PRIVATE
@@ -49,4 +50,16 @@ if(DEFINED ENABLE_TEST)
             osdev-libcppabi
             osdev-libstdc)
     target_compile_definitions(test_vector1.pass PUBLIC TEST_HAS_NO_EXCEPTIONS)
+endif()
+
+if(DEFINED ENABLE_TEST)
+    add_executable(licxxrt_test
+            tests/test_guard.cc
+            tests/test.cc
+            tests/test.cc)
+
+    target_link_libraries(licxxrt_test PRIVATE
+            osdev-libcppabi
+            osdev-libstdc)
+    target_compile_definitions(licxxrt_test PUBLIC _CXXRT_NO_EXCEPTIONS)
 endif()
