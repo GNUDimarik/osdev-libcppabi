@@ -10,7 +10,9 @@ add_library(${PROJECT_NAME} STATIC
         new.cpp
         vector.cpp
         cxxabi.h
-        tests/test.cc)
+        tests/test.cc
+        libelftc_dem_gnu3.cpp
+        tests/demangle_test.cpp)
 
 target_compile_options(${PROJECT_NAME}
         PRIVATE
@@ -55,11 +57,14 @@ endif()
 if(DEFINED ENABLE_TEST)
     add_executable(licxxrt_test
             tests/test_guard.cc
-            tests/test.cc
+            libelftc_dem_gnu3.cpp
             tests/test.cc)
 
     target_link_libraries(licxxrt_test PRIVATE
             osdev-libcppabi
             osdev-libstdc)
-    target_compile_definitions(licxxrt_test PUBLIC _CXXRT_NO_EXCEPTIONS)
+    target_compile_definitions(licxxrt_test PUBLIC _CXXRT_NO_EXCEPTIONS __STD_LIBC_TEST)
+    target_include_directories(licxxrt_test PRIVATE
+            "libstdc/include/arch/${ARCH}"
+            "libstdc/include/")
 endif()
