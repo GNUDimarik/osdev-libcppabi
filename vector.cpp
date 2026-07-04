@@ -41,7 +41,7 @@ void *__cxa_vec_new(
                           __constructor,
                           __destructor,
                           &::operator new[],
-                          nullptr);
+                          &::operator delete[]);
 }
 
 void *__cxa_vec_new2(
