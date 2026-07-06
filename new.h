@@ -55,4 +55,10 @@ void operator delete[](void *ptr, __STD_NAMESPACE::align_val_t alignment) noexce
 void operator delete(void *ptr, size_t size, __STD_NAMESPACE::align_val_t alignment) noexcept;
 void operator delete[](void *ptr, size_t size, __STD_NAMESPACE::align_val_t alignment) noexcept;
 
+void *operator new(size_t size, void *ptr) noexcept;
+void *operator new[](size_t size, void *ptr) noexcept;
+
+void operator delete(void *ptr, void *place) noexcept;
+void operator delete[](void *ptr, void *place) noexcept;
+
 #endif //___NEW_H__

@@ -85,3 +85,19 @@ void operator delete[](void *ptr, size_t size, __STD_NAMESPACE::align_val_t alig
 {
     __OSDEV_STD_SYMBOL(free)(ptr);
 }
+
+void *operator new(size_t size, void *ptr) noexcept
+{
+    return ptr;
+}
+
+void *operator new[](size_t size, void *ptr) noexcept
+{
+    return ptr;
+}
+
+void operator delete(void *ptr, void *place) noexcept
+{}
+
+void operator delete[](void *ptr, void *place) noexcept
+{}
