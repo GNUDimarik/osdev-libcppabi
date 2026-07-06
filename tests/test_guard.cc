@@ -4,63 +4,102 @@
 #include "test.h"
 
 static int static_count;
+
 struct static_struct
 {
-	int i;
-	static_struct()
-	{
-		static_count++;
-		i = 12;
-	};
+    int i;
+    static_struct()
+    {
+        static_count++;
+        i = 12;
+    };
 };
 
 static static_struct ss;
 
 int init_static(void)
 {
-	static static_struct s;
-	return s.i;
+    static static_struct s;
+    return s.i;
 }
 
 thread_local bool mainThread = false;
 
-void *init_static_race(void*);
+void *init_static_race(void *);
 
-static int instances = 0; 
+static int instances = 0;
+
 static pthread_t thr;
+
 struct static_slow_struct
 {
-	int field;
-	static_slow_struct()
-	{
-		if (mainThread)
-		{
-			// See if another thread can make progress while we hold the lock.
-			// This will happen if we get the lock and init bytes the wrong way
-			// around.
-			pthread_create(&thr, nullptr, init_static_race, nullptr);
-			sleep(1);
-		}
-		field = 1;
-		instances++;
-	};
+    int field;
+    static_slow_struct()
+    {
+        if (mainThread) {
+            // See if another thread can make progress while we hold the lock.
+            // This will happen if we get the lock and init bytes the wrong way
+            // around.
+            pthread_create(&thr, nullptr, init_static_race, nullptr);
+            sleep(1);
+        }
+        field = 1;
+        instances++;
+    };
 };
 
-void *init_static_race(void*)
+void *init_static_race(void *)
 {
-	static static_slow_struct s;
-	TEST(s.field == 1, "Field correctly initialised");
-	return nullptr;
+    static static_slow_struct s;
+    TEST(s.field == 1, "Field correctly initialised");
+    return nullptr;
+}
+
+struct Singleton
+{
+    int a = 0;
+
+    explicit Singleton(int val)
+        : a(val)
+    {
+        a++;
+        printf("%s\n", __PRETTY_FUNCTION__);
+    }
+
+    static Singleton *instance()
+    {
+        printf("before static thread %lu\n", pthread_self());
+        static Singleton x(13);
+        printf("after static, x.a = %d thread %lu\n", x.a, pthread_self());
+        return &x;
+    }
+};
+
+void *make_singleton(void *)
+{
+    auto a = Singleton::instance();
+    printf("%s a = %d\n", __PRETTY_FUNCTION__, a->a);
+    return nullptr;
 }
 
 void test_guards(void)
 {
-	init_static();
-	int i = init_static();
-	TEST(i == 12, "Static initialized");
-	TEST(static_count == 2, "Each static only initialized once");
-	mainThread = true;
-	init_static_race(nullptr);
-	pthread_join(thr, nullptr);
-	TEST(instances == 1, "Two threads both tried to initialise a static");
+    init_static();
+    int i = init_static();
+    TEST(i == 12, "Static initialized");
+    TEST(static_count == 2, "Each static only initialized once");
+    mainThread = true;
+    init_static_race(nullptr);
+    pthread_join(thr, nullptr);
+    TEST(instances == 1, "Two threads both tried to initialise a static");
+
+    pthread_t t1;
+    pthread_create(&t1, nullptr, make_singleton, nullptr);
+    printf("pthread_create t1 = %lu\n", t1);
+    pthread_t t2;
+    pthread_create(&t2, nullptr, make_singleton, nullptr);
+    printf("pthread_create t2 = %lu\n", t2);
+    pthread_join(t1, nullptr);
+    pthread_join(t2, nullptr);
+    make_singleton(nullptr);
 }
