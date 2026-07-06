@@ -92,6 +92,10 @@ int __cxa_guard_acquire(_Guard *__g)
         }
 
         if (__g->_M_try_lock()) {
+            if (__g->_M_is_done()) {
+                __g->_M_release();
+                return __cxa_guard_done;
+            }
             return __cxa_guard_creating;
         }
 
