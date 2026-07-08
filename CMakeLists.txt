@@ -4,13 +4,13 @@ project(osdev-libcppabi)
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(${PROJECT_NAME} STATIC
-        auxhelper.cc
         new.h
         new.cpp
         vector.cpp
         cxxabi.h
         tests/test.cc
-        guard.cpp)
+        guard.cpp
+        stubs.cpp)
 
 target_compile_options(${PROJECT_NAME}
         PRIVATE
