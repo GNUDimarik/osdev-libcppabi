@@ -5,62 +5,83 @@
 ![C++](https://img.shields.io/badge/C%2B%2B-20-blue)
 ![Platform](https://img.shields.io/badge/platform-freestanding-orange)
 
-![abi](https://raw.githubusercontent.com/GNUDimarik/osdev-libcppabi/main/docs/images/abi.png)
+![ABI](https://raw.githubusercontent.com/GNUDimarik/osdev-libcppabi/main/docs/images/abi.png)
 
-`osdev-libcppabi` is a lightweight freestanding implementation of the low-level C++ ABI runtime required by modern C++ compilers. It is designed for operating systems, kernels, bootloaders, and other freestanding environments.
+`osdev-libcppabi` is a lightweight freestanding implementation of the low-level C++ ABI runtime required by modern C++ compilers.
 
-The library is intended to work together with **osdev-libstdc** and provides the compiler support routines that are not part of the C++ standard library itself.
+The library is designed for operating systems, kernels, bootloaders, and other freestanding environments and is intended to work together with **osdev-libstdc**.
 
-## Features
+---
 
-- Thread-safe initialization of local static objects (`__cxa_guard_*`)
-- C++ runtime helper routines
-- Freestanding implementation suitable for kernel development
-- Global `new` / `delete` operators
-- Compatible with the Itanium C++ ABI
+# Features
 
-## Project Structure
+* Thread-safe initialization of local static objects (`__cxa_guard_acquire`, `__cxa_guard_release`, `__cxa_guard_abort`)
+* Global `operator new` / `operator delete`
+* C++ runtime helper routines
+* Compatible with the Itanium C++ ABI
+* Freestanding implementation suitable for kernel development
+* Zero external dependencies
 
-### Imported from [libcxxrt](https://github.com/libcxxrt/libcxxrt)
+---
 
-The following files are adapted from the **libcxxrt** project:
+# Implemented Components
 
-- `guard.cc`
-- `auxhelper.cc`
-- `atomic.h`
+## Guard Variables
 
-Repository:
+The library implements the Itanium C++ ABI guard routines required for thread-safe initialization of local static objects.
 
-https://github.com/libcxxrt/libcxxrt
+Implemented functions:
 
-The original project provides a BSD-licensed implementation of the [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html) runtime.
+* `__cxa_guard_acquire`
+* `__cxa_guard_release`
+* `__cxa_guard_abort`
 
-## Custom Implementation
+---
 
-The following components are implemented specifically for this project:
+## Global Memory Operators
 
-- All global `operator new` overloads
-- All global `operator delete` overloads
+The following global allocation operators are provided:
 
-These implementations are designed to work with **osdev-libstdc** memory allocation routines.
+* `operator new`
+* `operator new[]`
+* `operator delete`
+* `operator delete[]`
 
-## Dependencies
+Including sized, aligned, and placement overloads required for freestanding C++20 development.
+
+These operators are implemented on top of the memory allocation routines provided by **osdev-libstdc**.
+
+---
+
+## Runtime Helper Functions
+
+The library also provides a minimal set of C++ runtime helper functions required by GCC in freestanding environments.
+
+---
+
+# Dependencies
 
 `osdev-libcppabi` depends on:
 
-- osdev-libstdc
+* `osdev-libstdc`
 
-The final kernel or executable should be linked in the following order:
+Typical link order:
 
 ```text
-kernel objects
-    ↓
+Kernel Objects
+      ↓
 osdev-libcppabi
-    ↓
+      ↓
 osdev-libstdc
-    ↓
-libgcc
 ```
+
+---
+
+# Building
+
+## Clone Repository
+
+### SSH
 
 ```bash
 git clone --recurse-submodules git@github.com:GNUDimarik/osdev-libcppabi.git
@@ -69,23 +90,57 @@ git clone --recurse-submodules git@github.com:GNUDimarik/osdev-libcppabi.git
 ### HTTPS
 
 ```bash
-git clone --recurse-submodules [https://github.com/GNUDimarik/osdev-libstdc.git](https://github.com/GNUDimarik/osdev-libcppabi.git)
+git clone --recurse-submodules https://github.com/GNUDimarik/osdev-libcppabi.git
 ```
 
-## Freestanding build
+## Freestanding Build
 
-GCC Only!!!
+GCC only.
 
 ```bash
-cmake -DARCH=x86 -DCMAKE_CXX_COMPILER=your_toolchain-g++ -DCMAKE_C_COMPILER=your_toolchain-gcc -DOSDEV_FREESTANDING=1 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY ../
-
-Example:
-
-cmake -DARCH=x86 -DCMAKE_CXX_COMPILER=/mnt/d/osdev/i686-elf/bin/i686-elf-g++ -DCMAKE_C_COMPILER=/mnt/d/osdev/i686-elf/bin/i686-elf-gcc -DOSDEV_FREESTANDING=1 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY ../
+cmake \
+    -DARCH=x86 \
+    -DCMAKE_CXX_COMPILER=your_toolchain-g++ \
+    -DCMAKE_C_COMPILER=your_toolchain-gcc \
+    -DOSDEV_FREESTANDING=1 \
+    -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
+    ../
 
 make -j $(nproc)
 ```
 
-## Status
+Example:
 
-The project currently provides the minimal runtime required for freestanding C++ development and is intended for osdev
+```bash
+cmake \
+    -DARCH=x86 \
+    -DCMAKE_CXX_COMPILER=/mnt/d/osdev/i686-elf/bin/i686-elf-g++ \
+    -DCMAKE_C_COMPILER=/mnt/d/osdev/i686-elf/bin/i686-elf-gcc \
+    -DOSDEV_FREESTANDING=1 \
+    -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
+    ../
+
+make -j $(nproc)
+```
+
+---
+
+# Testing
+
+The project includes unit tests for the guard variable implementation to verify thread-safe initialization semantics.
+
+---
+
+# Status
+
+`osdev-libcppabi` currently provides the minimal subset of the Itanium C++ ABI required for freestanding C++ development.
+
+Additional ABI components will be implemented as the DUX operating system evolves.
+
+---
+
+# License
+
+MIT License
+
+Copyright (c) 2026 Dmitry Adzhiev
