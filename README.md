@@ -5,7 +5,16 @@
 ![C++](https://img.shields.io/badge/C%2B%2B-20-blue)
 ![Platform](https://img.shields.io/badge/platform-freestanding-orange)
 
-![ABI](https://raw.githubusercontent.com/GNUDimarik/osdev-libcppabi/main/docs/images/abi.png)
+<p align="center">
+  <img src="docs/images/abi.png" width="400" alt="osdev-libcppabi">
+</p>
+
+<h1 align="center">osdev-libcppabi</h1>
+
+<p align="center">
+A lightweight freestanding C/C++ library with zero external dependencies
+implementing the Itanium C++ ABI for operating system development.
+</p>
 
 `osdev-libcppabi` is a lightweight freestanding implementation of the low-level C++ ABI runtime required by modern C++ compilers.
 
