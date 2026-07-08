@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <pthread.h>
 #include <unistd.h>
 #include "test.h"
@@ -54,34 +53,6 @@ void *init_static_race(void *)
     TEST(s.field == 1, "Field correctly initialised");
     return nullptr;
 }
-
-struct Singleton
-{
-    int a = 0;
-
-    explicit Singleton(int val)
-        : a(val)
-    {
-        a++;
-        printf("%s\n", __PRETTY_FUNCTION__);
-    }
-
-    static Singleton *instance()
-    {
-        printf("before static thread %lu\n", pthread_self());
-        static Singleton x(13);
-        printf("after static, x.a = %d thread %lu\n", x.a, pthread_self());
-        return &x;
-    }
-};
-
-void *make_singleton(void *)
-{
-    auto a = Singleton::instance();
-    printf("%s a = %d\n", __PRETTY_FUNCTION__, a->a);
-    return nullptr;
-}
-
 void test_guards(void)
 {
     init_static();
@@ -92,14 +63,4 @@ void test_guards(void)
     init_static_race(nullptr);
     pthread_join(thr, nullptr);
     TEST(instances == 1, "Two threads both tried to initialise a static");
-
-    pthread_t t1;
-    pthread_create(&t1, nullptr, make_singleton, nullptr);
-    printf("pthread_create t1 = %lu\n", t1);
-    pthread_t t2;
-    pthread_create(&t2, nullptr, make_singleton, nullptr);
-    printf("pthread_create t2 = %lu\n", t2);
-    pthread_join(t1, nullptr);
-    pthread_join(t2, nullptr);
-    make_singleton(nullptr);
 }

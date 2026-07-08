@@ -66,3 +66,18 @@ if (DEFINED ENABLE_TEST)
             "libstdc/include/")
     target_compile_definitions(licxxrt_test PUBLIC _CXXRT_NO_EXCEPTIONS)
 endif ()
+
+if (DEFINED ENABLE_TEST)
+    add_executable(habr_test
+            tests/habr_test.cpp
+            tests/test.cc
+            guard.cpp)
+
+    target_link_libraries(habr_test PRIVATE
+            osdev-libcppabi
+            osdev-libstdc)
+    target_include_directories(habr_test PRIVATE
+            "libstdc/include/arch/${ARCH}"
+            "libstdc/include/")
+    target_compile_definitions(habr_test PUBLIC _CXXRT_NO_EXCEPTIONS HABR_TEST)
+endif ()

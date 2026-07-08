@@ -37,6 +37,7 @@ void test_exceptions();
 void test_init_primary_exception(void);
 void test_guards(void);
 void test_demangle(void);
+void habr_test();
 int main(int argc, char **argv)
 {
 	int ch;
@@ -53,7 +54,11 @@ int main(int argc, char **argv)
 #if 0
 	test_type_info();
 #endif
+#ifdef HABR_TEST
+	habr_test();
+#else
 	test_guards();
+#endif
 #if !defined(_CXXRT_NO_EXCEPTIONS)
 	test_exceptions();
 	test_init_primary_exception();
