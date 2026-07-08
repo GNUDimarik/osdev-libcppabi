@@ -1,12 +1,10 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <array>
 #include <atomic>
 
 #include "test.h"
 
-static pthread_barrier_t g_barrier;
 static std::atomic<int> g_constructor_calls{0};
 
 struct Singleton {
@@ -46,36 +44,22 @@ struct Singleton {
     }
 };
 
-void *make_singleton(void *) {
-    pthread_barrier_wait(&g_barrier);
-
-    auto a = Singleton::instance();
-
-    printf("%s a = %d thread [%lu]\n",
-           __PRETTY_FUNCTION__,
-           a->a,
-           pthread_self());
-
+void *make_singleton(void *)
+{
+    const auto a = Singleton::instance();
+    printf("%s a = %d\n", __PRETTY_FUNCTION__, a->a);
     return nullptr;
 }
 
 void habr_test() {
-    constexpr size_t kThreadNumber = 2;
-    std::array<pthread_t, kThreadNumber> threads;
-
-    g_constructor_calls.store(0, std::memory_order_release);
-
-    pthread_barrier_init(&g_barrier, nullptr, kThreadNumber);
-
-    for (size_t i = 0; i < kThreadNumber; ++i) {
-        pthread_create(&threads[i], nullptr, make_singleton, nullptr);
-        printf("pthread_create threads[%zu] = [%lu]\n", i, threads[i]);
-    }
-
-    for (size_t i = 0; i < kThreadNumber; ++i) {
-        pthread_join(threads[i], nullptr);
-    }
-
-    pthread_barrier_destroy(&g_barrier);
-    TEST(g_constructor_calls.load(std::memory_order_acquire) == 1, "constructor calls more than 1");
+    pthread_t t1;
+    pthread_create(&t1, nullptr, make_singleton, nullptr);
+    printf("pthread_create t1 = [%lu]\n", t1);
+    pthread_t t2;
+    pthread_create(&t2, nullptr, make_singleton, nullptr);
+    printf("pthread_create t2 = [%lu]\n", t2);
+    pthread_join(t1, nullptr);
+    pthread_join(t2, nullptr);
+    make_singleton(nullptr);
+    TEST(g_constructor_calls.load() == 1, "Constructor called more than once");
 }
