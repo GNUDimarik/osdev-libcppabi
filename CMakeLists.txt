@@ -8,7 +8,6 @@ add_library(${PROJECT_NAME} STATIC
         new.cpp
         vector.cpp
         cxxabi.h
-        tests/test.cc
         guard.cpp
         stubs.cpp)
 
