@@ -23,7 +23,7 @@ target_compile_options(${PROJECT_NAME}
         -std=gnu++20
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(${PROJECT_NAME} PUBLIC
         "libstdc/include/arch/${ARCH}"
         "libstdc/include/")
 
@@ -35,8 +35,7 @@ target_link_options(${PROJECT_NAME}
 
 add_subdirectory(libstdc)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE osdev-libstdc)
-target_compile_definitions(${PROJECT_NAME} PRIVATE _CXXRT_NO_EXCEPTIONS)
+target_link_libraries(${PROJECT_NAME} PUBLIC osdev-libstdc)
 
 if (DEFINED ENABLE_TEST)
     target_compile_definitions(${PROJECT_NAME} PRIVATE LIBCPPABI_TEST)
